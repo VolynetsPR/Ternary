@@ -1,0 +1,54 @@
+help
+
+cll F(+0++t)
+end
+lbl F(x)
+snd S, x
+jmp 0, null
+var a, 0
+mov A, a
+glb 1, +
+snd A, 1
+sub S, A
+jmp 0, one
+jmp def
+lbl null()
+del
+ret
+lbl one()
+snd S, 1
+snd A, a
+del
+del
+ret
+lbl def()
+var q, 0
+mov S, q
+swp
+cll F(q)
+mov S, q
+swp
+snd A, 1
+sub S, A
+snd A, q
+mov S, q
+cll F(q)
+sum
+snd A, a
+del
+del
+del
+ret
+
+
+
+
+
+
+
+
+
+
+
+
+
