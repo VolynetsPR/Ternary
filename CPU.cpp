@@ -471,6 +471,7 @@ bool CPU::execute() {
         SumAddress(p, K.ll);
         poke(p, code);
         FlagW(code);
+        break;
     //case :    // 0+--     (M) <-> (F)
     default:
         return false;
