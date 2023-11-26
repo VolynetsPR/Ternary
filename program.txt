@@ -1,4 +1,6 @@
-cll F(+0+0t)
+glb f, 0
+inp f
+cll F(f)
 end
 lbl F(x)
 snd S, x

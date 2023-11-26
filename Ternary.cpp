@@ -639,6 +639,9 @@ void AssemblerCompiler(vector<string> program, RAM& ram, CPU& cpu) {
                 std::cout << n << " - " << Word(sh) << '\n';
             }
         }
+        else if (strcmp(command, "out") == 0) {
+
+        }
         else if (strcmp(command, "hel") == 0) { // help
             setlocale(LC_ALL, "");
             

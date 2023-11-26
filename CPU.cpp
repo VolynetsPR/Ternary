@@ -445,6 +445,7 @@ bool CPU::execute() {
         FlagW(code);
         break;
     case 47:    // 0+-+     (Adr) -> "output.txt"
+
         break;
     case 46:    // 0+-0     (S) <-> (A)
         code = A.ll;
@@ -471,6 +472,8 @@ bool CPU::execute() {
         SumAddress(p, K.ll);
         poke(p, code);
         FlagW(code);
+        break;
+    case 43:    // 00+0     {(P) + Adr} -> "output.txt"
         break;
     //case :    // 0+--     (M) <-> (F)
     default:
