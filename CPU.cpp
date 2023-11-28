@@ -475,7 +475,12 @@ bool CPU::execute() {
         break;
     case 43:    // 00+0     {(P) + Adr} -> "output.txt"
         break;
-    //case :    // 0+--     (M) <-> (F)
+    case 42:    // 00+-     (M) <-> (F)
+        code = F.ll;
+        F.ll = M.ll;
+        M.ll = code;
+        FlagW(M.ll);
+        break;
     default:
         return false;
         break;
