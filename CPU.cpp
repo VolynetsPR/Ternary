@@ -136,6 +136,7 @@ CPU::CPU(RAM ram) {
     C.ll = address;
     P.ll = 0b10'10'10'10'10'10'10'10'111111111111111111111111111111111111111111111111; // ++++++++
     input.open("input.txt");
+    output.open("output.txt");
 }
 
 // (X) + 1 -> (X)
@@ -253,6 +254,7 @@ void CPU::FlagW(unsigned long long const& ll) {
 }
 
 unsigned long long createNumber(char const* num);
+#include <iostream>
 
 bool CPU::execute() {
     K.ll = peek(C.ll);
@@ -444,8 +446,25 @@ bool CPU::execute() {
         poke(K.ll, code);
         FlagW(code);
         break;
-    case 47:    // 0+-+     (Adr) -> "output.txt"
-
+    case 47:    // 0+-+     (Adr) -> "output.txt", вывод как 6 символов
+        code = peek(K.ll);
+        unsigned char ch;
+        for (int i = 54; i > 2; i -= 10) { // 54 44 34 24 14 4
+            ch = 0;
+            for (int j = i + 8; j >= i; j -= 2) {
+                ch *= 3;
+                if (code & (2ULL << j)) {
+                    ch += 2;
+                    continue;
+                }
+                if (!(code & (1ULL << j))) {
+                    ch += 1;
+                }
+                std::cout << int(ch) << ' ';
+            }
+            std::cout << '\n';
+            output << ch;
+        }
         break;
     case 46:    // 0+-0     (S) <-> (A)
         code = A.ll;
@@ -474,7 +493,28 @@ bool CPU::execute() {
         FlagW(code);
         break;
     case 43:    // 00+0     {(P) + Adr} -> "output.txt"
+    {
+        code = K.ll;
+        p = P.ll;
+        SumAddress(p, code);
+        code = peek(p);
+        unsigned char ch;
+        for (int i = 54; i > 2; i -= 10) { // 54 44 34 24 14 4
+            ch = 0;
+            for (int j = i; j < i + 10; j += 2) {
+                ch *= 3;
+                if (code & (2ULL << j)) {
+                    ch += 2;
+                    continue;
+                }
+                if (!(code & (1ULL << j))) {
+                    ch += 1;
+                }
+            }
+            output << ch;
+        }
         break;
+    }
     case 42:    // 00+-     (M) <-> (F)
         code = F.ll;
         F.ll = M.ll;

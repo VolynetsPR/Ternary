@@ -276,7 +276,7 @@ void AssemblerCompiler(vector<string> program, RAM& ram, CPU& cpu) {
             }
             j = 31;
             int end = program[i].size();
-            while (program[i][--end] != ' ') {
+            while (j >= 0 && program[i][--end] != ' ') {
                 num[j--] = program[i][end];
             }
 
@@ -386,7 +386,6 @@ void AssemblerCompiler(vector<string> program, RAM& ram, CPU& cpu) {
                     i += 1;
                     continue;
                 }
-
             }
             std::cout << program[i][4] << " adr - " << address << '\n';
 
@@ -640,11 +639,35 @@ void AssemblerCompiler(vector<string> program, RAM& ram, CPU& cpu) {
             }
         }
         else if (strcmp(command, "out") == 0) {
+            if (program[i][program[i].size() - 1] == 't') {
+                for (int j = 0; j < 8; ++j) {
+                    address[j] = program[i][j + 4];
+                }
+                ram.memory[ramAdr++] = createCommand(address, "0+-+"); // 0+-+     (Adr) -> "output.txt"
+                cout << address << "t\n";
+            }
+            else {
+                string nam = program[i].substr(4, string::npos);
+                std::cout << "name - (" << nam << ")\n";
+                if (var.contains(nam)) {
+                    std::cout << "lcl ";
+                    unsigned long long ull = var[nam];
+                    std::cout << Word(ull) << '\n';
+                    ram.memory[ramAdr++] = createCommand(address, "00+0"); // 00+0     {(P) + Adr} -> "output.txt"
+                    i += 1;
+                }
+                else {
+                    std::cout << "glb ";
+                    unsigned long long ull = glb[nam];
+                    std::cout << Word(ull) << '\n';
+                    ram.memory[ramAdr++] = createCommand(ull, "0+-+"); // 0+-+     (Adr) -> "output.txt"
+                    i += 1;
+                }
 
+            }
         }
         else if (strcmp(command, "hel") == 0) { // help
-            setlocale(LC_ALL, "");
-            
+            setlocale(LC_ALL, ""); 
             std::cout << "(adr) - адрес, должен содержать 8 тритов. Например: +-0-+0+0" ;
             std::cout << "set - записывает число в указанную ячейку оперативной памяти\n\t\
 Синтаксис: set (adr), (value)\n";
@@ -761,7 +784,7 @@ int main()
     vector<string> asmb(Asize);
     int i = 0;
     while (!in.eof()) {
-        in.getline(str, 30);
+        in.getline(str, 50);
         asmb[i] = str;
         i++;
     }
@@ -775,10 +798,14 @@ int main()
         std::cout << "error\n";
     }
 
+    //for (int i = 0; i < 5; i++) {
+    //    cout << Word(ram.memory[i]) << '\n';
+    //}
     cin >> run;
     while (run) {
         for (int i = 0; i < run; i++) {
             if(!Cpu.execute()) {
+                std::cout << "End:\n";
                 std::cout << "S - " << Cpu.S << ' ' << ten(Cpu.S.ll) << " \nA - " << Cpu.A << ' ' << ten(Cpu.A.ll) <<
                 " \nC - " << Cpu.C << "\nK - " << Cpu.K <<
                 "\nM - " << Cpu.M << ' ' << ten(Cpu.M.ll) << " \nF - " << Cpu.F << ' ' << ten(Cpu.F.ll) <<
@@ -794,7 +821,7 @@ int main()
             //unsigned long long x;
             //for (x = 0b10'10'10'10'10'10'10'10'111111111111111111111111111111111111111111111111; ten(x) > ten(Cpu.P.ll); decrementAddress(x)) {
             //    std::cout << Word(x) << " - " << Word(Cpu.peek(x)) << '\n';
-            //}
+            //} 
         }
         cin >> run;
     }

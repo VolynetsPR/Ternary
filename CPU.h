@@ -22,6 +22,7 @@ struct CPU
 	//Word R; // Register for calculations
 
 	std::ifstream input;
+	std::ofstream output;
 
 	CPU(RAM ram);
 
@@ -33,15 +34,6 @@ struct CPU
 	void poke(unsigned long long const& address, unsigned long long const& num, RAM const& Ram = 0);
 
 	void FlagW(unsigned long long const& ll);
-	// (Adr) -> (S)
-	//inline void pS(unsigned long long const& address);
-	//// (Adr) -> (A)
-	//inline void pA(unsigned long long const& address);
-	//// (S) -> (Adr)
-	//inline void pAdrS(unsigned long long const& address);
-	//// (A) -> (Adr)
-	//inline void pAdrA(unsigned long long const& address);
-
 
 	bool execute();
 };
