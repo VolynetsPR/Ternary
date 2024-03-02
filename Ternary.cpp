@@ -1,6 +1,5 @@
 ﻿#include <iostream>
 #include <fstream>
-#include <Windows.h>
 #include <string.h>
 #include <vector>
 
@@ -276,7 +275,7 @@ void AssemblerCompiler(vector<string> program, RAM& ram, CPU& cpu) {
             }
             j = 31;
             int end = program[i].size();
-            while (j >= 0 && program[i][--end] != ' ') {
+            while (program[i][--end] != ' ') {
                 num[j--] = program[i][end];
             }
 
